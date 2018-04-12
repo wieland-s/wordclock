@@ -1,6 +1,6 @@
 
 # Wordclock
-// german wordclock with arduino uno R3 and WS2812b LED-stripe
+<!-- german wordclock with arduino uno R3 and WS2812b LED-stripe -->
 Building a german version of a wordclock with a Arduino Uno R3 and a WS2812B LED-Stripe
 
 ## Hardware
