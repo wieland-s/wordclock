@@ -14,6 +14,10 @@
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
+//Array to save configuration until it goes online.
+int myleds[NUM_LEDS];
+
+
 // Time variables
 int h;
 int m;
@@ -22,7 +26,7 @@ int s;
 uint8_t gHue = 0; // rotating "base color" used for raibow
 
 void setup() {
-  delay(8000); // 3 second delay for recovery
+  delay(5000); // 5 second delay for recovery
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 
@@ -42,7 +46,10 @@ void loop() {
   /* Get current time */
   h=hourFormat12();    // Returns the hour of current time between 1-12
   m=minute();         // Returns the minute of current time
-   
+
+  //Set default CRGB color
+  CRGB myColor = CRGB::White; 
+  
   // for debug: 
 /*
   Serial.print(h);
@@ -53,51 +60,51 @@ void loop() {
   */
 
   // "Es ist" (it is) constant
-    leds[39] = CRGB::White;   // ES
-    leds[38] = CRGB::White;   // IST
+    myleds[39] = 1;   // ES
+    myleds[38] = 1;   // IST
 
   //Minutes
   // minutes 0-5 -> "Uhr" (o' clock)
   if ((m>=0 && m<5)){
-    leds[3] = CRGB::White;
+    myleds[3] = 1;
   }
   
   // minutes 5-10 or 55-60: Fünf (five)
   if ((m>=5 && m<10) || (m>=55 && m<60) || (m>=25 && m<30) || (m>=35 && m<40)){
-    leds[37] = CRGB::White;
-    leds[36] = CRGB::White;
+    myleds[37] = 1;
+    myleds[36] = 1;
   }
 
   //Zehn (ten)
   if ((m>=10 && m<15) || (m>=50 && m<55)){
-    leds[32] = CRGB::White;
+    myleds[32] = 1;
   }
 
   // Viertel (quarter)
   if ((m>=15 && m<20) || (m>=45 && m<50)){
-    leds[29] = CRGB::White;
-    leds[28] = CRGB::White;
+    myleds[29] = 1;
+    myleds[28] = 1;
   }
   
   //Zwanzig (twenty)
   if ((m>=20 && m<25) || (m>=40 && m<45)){
-    leds[34] = CRGB::White;
-    leds[35] = CRGB::White;
+    myleds[34] = 1;
+    myleds[35] = 1;
   }  
 
   //Half 
    if ((m>= 25 && m<40)){
-    leds[23] = CRGB::White;
+    myleds[23] = 1;
   }
 
   // -> "Nach" (past)
   if (((m>=5) && (m<25)) || (m>=35 && m<40) ){
-    leds[25] = CRGB::White;
+    myleds[25] = 1;
   }
   
   // Minutes  40-60 and 25-30 -> "vor" (to)"
   if (m>=40 || (m>=25 && m<30) ){
-    leds[26] = CRGB::White;
+    myleds[26] = 1;
   }
   
   // Modify current hour value (because it is TO five, when the fouth hour is)
@@ -115,54 +122,61 @@ void loop() {
   // Hours
   // if Hour=1 -> Light "Eins" (engl.: one)
   if (h == 1){
-    leds[17] = CRGB::White;
+    myleds[17] = 1;
   }
 
   if (h == 2){
-    leds[16] = CRGB::White;
+    myleds[16] = 1;
   }
 
   if (h == 3){
-    leds[15] = CRGB::White;
-    leds[14] = CRGB::White;
+    myleds[15] = 1;
+    myleds[14] = 1;
   }
 
   if (h == 4){
-    leds[11] = CRGB::White;
+    myleds[11] = 1;
   }
 
   if (h == 5){
-    leds[12] = CRGB::White;
+    myleds[12] = 1;
   }
 
   if (h == 6){
-    leds[0] = CRGB::White;
-    leds[1] = CRGB::White;
+    myleds[0] = 1;
+    myleds[1] = 1;
   }
 
   if (h == 7){
-    leds[18] = CRGB::White;
-    leds[19] = CRGB::White;
+    myleds[18] = 1;
+    myleds[19] = 1;
   }
 
   if (h == 8){
-    leds[7] = CRGB::White;
+    myleds[7] = 1;
   }
 
   if (h == 9){
-    leds[9] = CRGB::White;
+    myleds[9] = 1;
   }
 
   if (h == 10){
-    leds[5] = CRGB::White;
+    myleds[5] = 1;
   }
 
   if (h == 11){
-    leds[8] = CRGB::White;
+    myleds[8] = 1;
   }
 
   if (h == 12){
-    leds[21] = CRGB::White;
+    myleds[21] = 1;
+  }
+
+  // set myleds to the LED stripe
+  for (int i=0; i < NUM_LEDS; i++){
+    if (myleds[i]){
+      leds[i] = myColor; 
+    }
   }
 
   FastLED.show(); //Display changes
@@ -170,6 +184,8 @@ void loop() {
   
   // Clear Config for next iteration
   for (int i = 0; i < NUM_LEDS; i++){
-    leds[i] = CRGB::Black;
+    myleds[i] = 0;
   }
+  fill_solid(leds, NUM_LEDS, CRGB::Black); 
+  
 }
