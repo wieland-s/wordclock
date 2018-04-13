@@ -6,7 +6,7 @@
 #define DATA_PIN    3
 #define NUM_LEDS    120
 #define LED_TYPE    WS2812B
-#define COLOR_ORDER RGB
+#define COLOR_ORDER BRG
 
 #define BRIGHTNESS         220 // Value range: 0-255
 // #define FRAMES_PER_SECOND  120
