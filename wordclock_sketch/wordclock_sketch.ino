@@ -1,6 +1,7 @@
 #include <Time.h>
 #include <TimeLib.h>
 #include <FastLED.h>
+#include <DS3232RTC.h>      // https://github.com/JChristensen/DS3232RTC
 
 
 #define DATA_PIN    3
@@ -19,9 +20,10 @@ int myleds[NUM_LEDS];
 
 
 // Time variables
-int h;
-int m;
-int s;
+int h = 1;
+int m = 1;
+
+time_t myTime;
 
 uint8_t gHue = 0; // rotating "base color" used for raibow
 
@@ -30,10 +32,17 @@ void setup() {
   FastLED.addLeds<LED_TYPE, DATA_PIN, COLOR_ORDER>(leds, NUM_LEDS);
   FastLED.setBrightness(BRIGHTNESS);
 
-  setTime(12,0,0,15,4,2018); //Initialize current time as Midnight/noon 15.04.2018
+  // setTime(12,0,0,15,4,2018); //Initialize current time as Midnight/noon 15.04.2018
 
-  // Serial.begin(9600); //Begin Serial for debugging purposes
+  Serial.begin(9600); //Begin Serial for debugging purposes
 
+  setSyncProvider(RTC.get);
+  if(timeStatus() != timeSet){
+        Serial.println("Unable to sync with the RTC");
+  }
+    else {
+        Serial.println("RTC has set the system time");
+  }
   // Startscrren Rainbow 5 sec
   delay(1000);
   fill_rainbow(leds, NUM_LEDS, gHue, 7);
@@ -46,18 +55,19 @@ void loop() {
   /* Get current time */
   h=hourFormat12();    // Returns the hour of current time between 1-12
   m=minute();         // Returns the minute of current time
+  
 
+  
   //Set default CRGB color
   CRGB myColor = CRGB::White; 
   
   // for debug: 
-/*
+
   Serial.print(h);
   Serial.print(":");
-  Serial.print(m);
-  Serial.print(":");
-  Serial.println(s);
-  */
+  Serial.println(m);
+ 
+  
 
   // "Es ist" (it is) constant
     myleds[39] = 1;   // ES
