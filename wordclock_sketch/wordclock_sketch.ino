@@ -4,6 +4,13 @@
 #include <DS3232RTC.h>      // https://github.com/JChristensen/DS3232RTC
 
 
+/** RTC - Arduino
+ *  GND -> GND
+ *  Vcc -> 5V (3.3 Volt auch möglich)
+ *  SCL -> SCL (nahe Rest Knopf; Alt: A5))
+ *  SDA -> SDA (neben SCL; Alt. A4)
+ */
+
 #define DATA_PIN    3
 #define NUM_LEDS    40
 #define LED_TYPE    WS2812B
